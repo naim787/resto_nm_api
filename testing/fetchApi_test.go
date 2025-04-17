@@ -11,46 +11,54 @@ import (
 )
 
 func Test_PostUsers(t *testing.T) {
-	data := []models.Users{
-		{
-			Name : "Naim",
-			Id : "123",
-			Email : "naimmmmab@gmail.com",
-			Password : "123",
-			Bis_Loc : "paniki",
-			Date_Loc : "2025",
-			Year : "2004",
-			Role : "admin",
-		},
-	}
+    data := models.Users{
+        Name:     "Naim",
+        Id:       "123",
+        Email:    "naimmmmab@gmail.com",
+        Password: "123",
+        Bis_Loc:  "paniki",
+        Date_Loc: "2025",
+        Year:     "2004",
+        Role:     "admin",
+    }
 
-	jsonData, _ := json.Marshal(data)
+    jsonData, _ := json.Marshal(data)
 
-	resp, err := http.Post("http://127.0.0.1:3000/create-users", "application/json", bytes.NewBuffer(jsonData))
-	if err != nil {
-		fmt.Println("Error:", err)
+    resp, err := http.Post("http://127.0.0.1:3000/create-users", "application/json", bytes.NewBuffer(jsonData))
+    if err != nil {
+        t.Fatalf("Error: %v", err)
+    }
+    defer resp.Body.Close()
 
-		return
-	}
-	defer resp.Body.Close()
+    var response []models.Users
+    json.NewDecoder(resp.Body).Decode(&response)
 
-	json.NewDecoder(resp.Body).Decode(&data)
+    fmt.Println("Response:", response)
 
-	fmt.Println("Response:",data)
+    // Validasi apakah data berhasil disimpan
+    if len(response) == 0 || response[0].Name != "Naim" {
+        t.Fatalf("Data not saved correctly")
+    }
 }
 
 
 
-func Test_GetUsers(t *testing.T) {
-	resp, err := http.Get("http://127.0.0.1:3000/users")
+func Test_GetUsersAfterPost(t *testing.T) {
+    // Panggil endpoint /users
+    resp, err := http.Get("http://127.0.0.1:3000/users")
     if err != nil {
-        fmt.Println("Error:", err)
-        return
+        t.Fatalf("Error: %v", err)
     }
     defer resp.Body.Close()
 
-    body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Println(string(body))
+    var response struct {
+        Message string          `json:"message"`
+        Data    []models.Users  `json:"data"`
+    }
+    json.NewDecoder(resp.Body).Decode(&response)
+
+    fmt.Println("Response:", response)
+
 }
 
 func Test_DeleteUsers(t *testing.T) {

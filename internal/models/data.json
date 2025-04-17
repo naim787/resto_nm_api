@@ -1,0 +1,60 @@
+{
+    "restaurants":{
+            "ID": "REST001",
+            "Name": "Restoran Naim",
+            "Address": "Jl. Paniki No. 1, Manado",
+            "PhoneNumber": "08123456789",
+            "Email": "resto@naim.com",
+            "OpeningHours": "08:00 - 22:00",
+            "Rating": 4.5
+    },
+
+    "users": [
+        {
+            "Name": "Naim",
+            "Id": "123",
+            "Email": "naimmmmab@gmail.com",
+            "Password": "123",
+            "Bis_Loc": "Paniki",
+            "Date_Loc": "2025-04-18",
+            "Year": "2004",
+            "Role": "admin"
+        },
+        {
+            "Name": "John Doe",
+            "Id": "124",
+            "Email": "johndoe@example.com",
+            "Password": "password123",
+            "Bis_Loc": "Manado",
+            "Date_Loc": "2025-04-17",
+            "Year": "1990",
+            "Role": "manager"
+        }
+    ],
+
+    "products": [
+        {
+            "ID": "PROD001",
+            "Name": "Nasi Goreng",
+            "Description": "Nasi goreng dengan ayam dan telur",
+            "Category": "makanan",
+            "Price": 25000,
+            "Stock": 50,
+            "ImageURL": "https://example.com/images/nasi-goreng.jpg"
+        }
+    ],
+    
+    "warehouses": [
+        {
+            "ID": "WARE001",
+            "Name": "Gudang Toko",
+            "Location": "Jl. Toko No. 1",
+            "Capacity": 100,
+            "CurrentStock": 50,
+            "ManagerName": "John Doe",
+            "Contact": "08123456789",
+            "Type": "Toko",
+            "Storage": ["Sabun", "Tisu Toilet", "Shampoo"]
+        }
+    ]
+}
