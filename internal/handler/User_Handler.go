@@ -10,8 +10,9 @@ import (
 )
 
 func GetUsers(c *fiber.Ctx) error {
-    data, err := repository.RedUsers()
+    data, err := repository.ReadDB("users")
     if err == leveldb.ErrNotFound {
+        // jika data nnya kosog
         return c.Status(200).JSON(fiber.Map{
             "message": "No users found",
             "data":    []models.Users{},
@@ -56,7 +57,7 @@ func CreateUsers(c *fiber.Ctx) error {
     }
 
     // Baca data dari database
-    dbData, err := repository.RedUsers()
+    dbData, err := repository.ReadDB("users")
     if err == leveldb.ErrNotFound {
         // Jika data tidak ditemukan, buat array baru
         users := []models.Users{user}
@@ -86,3 +87,6 @@ func CreateUsers(c *fiber.Ctx) error {
 
     return c.Status(201).JSON(users)
 }
+
+
+

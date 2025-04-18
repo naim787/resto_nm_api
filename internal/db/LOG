@@ -210,3 +210,23 @@
 10:57:04.674995 version@stat F·[] S·0B[] Sc·[]
 10:57:04.681031 db@janitor F·2 G·0
 10:57:04.681580 db@open done T·9.3544ms
+=============== Apr 18, 2025 (KST) ===============
+22:57:32.142352 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+22:57:32.164067 version@stat F·[] S·0B[] Sc·[]
+22:57:32.169315 db@open opening
+22:57:32.176261 journal@recovery F·1
+22:57:32.177423 journal@recovery recovering @46
+22:57:32.196965 memdb@flush created L0@48 N·3 S·287B "users,d16":"users,v14"
+22:57:32.200785 version@stat F·[1] S·287B[287B] Sc·[0.25]
+22:57:32.245273 db@janitor F·3 G·0
+22:57:32.245739 db@open done T·74.695682ms
+=============== Apr 18, 2025 (KST) ===============
+23:33:35.633191 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+23:33:35.645129 version@stat F·[1] S·287B[287B] Sc·[0.25]
+23:33:35.645669 db@open opening
+23:33:35.647406 journal@recovery F·1
+23:33:35.648032 journal@recovery recovering @49
+23:33:35.657444 memdb@flush created L0@51 N·1 S·248B "users,v18":"users,v18"
+23:33:35.660497 version@stat F·[2] S·535B[535B] Sc·[0.50]
+23:33:35.695252 db@janitor F·4 G·0
+23:33:35.695573 db@open done T·49.693184ms

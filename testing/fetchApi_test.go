@@ -51,11 +51,24 @@ func Test_GetUsersAfterPost(t *testing.T) {
     }
     defer resp.Body.Close()
 
+     // Validasi status code
+     if resp.StatusCode != http.StatusOK {
+        t.Fatalf("Status code tidak sesuai, dapat: %d, ingin: %d", resp.StatusCode, http.StatusOK)
+    }
+
     var response struct {
         Message string          `json:"message"`
         Data    []models.Users  `json:"data"`
     }
-    json.NewDecoder(resp.Body).Decode(&response)
+    
+    if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
+        t.Fatalf("Error saat decoding response JSON: %v", err)
+    }
+
+    // Validasi struktur response
+    if len(response.Data) == 0 {
+        t.Fatalf("Data pengguna kosong, seharusnya ada data pengguna")
+    }
 
     fmt.Println("Response:", response)
 

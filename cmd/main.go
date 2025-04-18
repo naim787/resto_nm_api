@@ -28,6 +28,7 @@ func main() {
     app.Get("/users", handler.GetUsers)
     app.Get("/delete-users", handler.DeleteUsers)
     app.Post("/create-users", handler.CreateUsers)
+    app.Post("/create-products", handler.CreateProducts)
 
     log.Fatal(app.Listen(":3000"))
 }

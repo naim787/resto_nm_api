@@ -17,13 +17,18 @@ func OpenDB() (*leveldb.DB, error) {
     return db, nil
 }
 
-// membaca data dari database 
-func RedUsers() ([]byte, error) {
+/////////////////////// function /////////////////////////////////////////////
+
+func ReadDB(key string) ([]byte, error) {
     if db == nil {
         return nil, leveldb.ErrClosed
     }
-    return db.Get([]byte("users"), nil)
+    return db.Get([]byte(key), nil)
 }
+
+
+
+/////////////////////// USERS /////////////////////////////////////////////
 
 // meyimpan data ke database
 func SaveUsers(data []byte) error {
@@ -40,3 +45,8 @@ func DeleteUsers() error {
     }
     return db.Delete([]byte("users"), nil)
 }
+
+
+
+
+/////////////////////// PRODUCT /////////////////////////////////////////////

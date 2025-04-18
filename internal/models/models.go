@@ -12,7 +12,7 @@ type Users struct {
 }
 
 
-type Product struct {
+type Products struct {
     ID          string  // ID unik produk
     Name        string  // Nama menu (misal: Nasi Goreng)
     Description string  // Deskripsi singkat
