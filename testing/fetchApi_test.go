@@ -72,19 +72,3 @@ func Test_DeleteUsers(t *testing.T) {
     body, _ := ioutil.ReadAll(resp.Body)
     fmt.Println(string(body))
 }
-
-
-
-
-func Test_logika(t *testing.T) {
-	var d []models.Users
-	 users := models.Users{
-		Name : "naim",
-		Id : "12355",
-		Email : "naimm@gmail.com",
-		Password : "123",
-	}
-
-	d = append(d, users)
-	fmt.Println(d)
-}
