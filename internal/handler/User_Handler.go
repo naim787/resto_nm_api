@@ -62,7 +62,7 @@ func CreateUsers(c *fiber.Ctx) error {
 
     // // Use reusable function to save or update product
     // products, err := service.SaveOrUpdateData[[]models.Users]("products", useR, c)
-    // if err != nil {
+    // if err != nil {g
     //     return err
     // }
 
