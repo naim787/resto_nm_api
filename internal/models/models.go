@@ -1,5 +1,12 @@
 package models
 
+type representasiData struct {
+    Users Users
+    Products Products
+    Restaurant Restaurant
+    Warehouse Warehouse
+}
+
 type Users struct {
 	Name string // id users
 	Id string // id users
