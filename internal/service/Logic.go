@@ -12,14 +12,16 @@ import (
 func SaveOrUpdateData[T any](key string, newItems []T, c *fiber.Ctx) ([]T, error) {
     // Baca data dari database
     dbData, err := repository.ReadDB(key)
+    // Jika data tidak ada, simpan newItems ke database
     if err == leveldb.ErrNotFound {
-        // Jika data tidak ditemukan, simpan newItems langsung
         itemBytes, _ := json.Marshal(newItems)
         err = repository.SaveUsers(itemBytes) // Simpan data ke database
         if err != nil {
             return nil, c.Status(500).JSON(fiber.Map{"error": "Failed to save data"})
         }
         return newItems, nil
+        
+    // jika ada kesalahan membaca data dari database
     } else if err != nil {
         return nil, c.Status(500).JSON(fiber.Map{"error": "Failed to read data from DB"})
     }

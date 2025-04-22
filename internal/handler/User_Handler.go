@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"resto_nm_api/internal/models"
 	"resto_nm_api/internal/repository"
+	"resto_nm_api/internal/service"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/syndtr/goleveldb/leveldb"
@@ -57,20 +58,19 @@ func CreateUsers(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid JSON"})
     }
 
-    // ambil data dari users revensi dari models.Users
-    // useR := []models.Users{users}
+    //ambil data dari users revensi dari models.Users
 
-    // // Use reusable function to save or update product
-    // products, err := service.SaveOrUpdateData[[]models.Users]("products", useR, c)
-    // if err != nil {g
-    //     return err
-    // }
+    // Use reusable function to save or update product
+    products, err := service.SaveOrUpdateData("products", []models.Users{users}, c)
+    if err != nil {
+        return err
+    }
 
-    fmt.Println(users)
+    fmt.Println(products)
     // return c.Status(201).JSON(products)
     return c.Status(200).JSON(fiber.Map{
         "message": "susess",
-        "data": []models.Users{users},
+        "data": products,
     })
 }
 
