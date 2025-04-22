@@ -11,6 +11,7 @@ import (
 	"github.com/syndtr/goleveldb/leveldb"
 )
 
+////////////// CARI USERS //////////////////
 func GetUsers(c *fiber.Ctx) error {
     data, err := repository.ReadDB("users")
     if err == leveldb.ErrNotFound {
@@ -49,6 +50,9 @@ func DeleteUsers(c *fiber.Ctx) error {
     })
 }
 
+
+
+////////////// BUAT USERS BARU //////////////////
 func CreateUsers(c *fiber.Ctx) error {
     var users models.Users
 
@@ -58,21 +62,51 @@ func CreateUsers(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid JSON"})
     }
 
-    //ambil data dari users revensi dari models.Users
-
-    // Use reusable function to save or update product
-    products, err := service.SaveOrUpdateData("products", []models.Users{users}, c)
+    // Gunakan key "users" untuk menyimpan data pengguna
+    savedUsers, err := service.SaveOrUpdateData("users", []models.Users{users}, c)
     if err != nil {
         return err
     }
 
-    fmt.Println(products)
-    // return c.Status(201).JSON(products)
+    fmt.Println(savedUsers)
     return c.Status(200).JSON(fiber.Map{
         "message": "susess",
-        "data": products,
+        "data": savedUsers,
     })
 }
 
 
 
+
+////////////// CARI ID USERS //////////////////
+func GetUserByID(c *fiber.Ctx) error {
+    // Tangkap query parameter "id"
+    id := c.Query("id")
+
+    // Periksa apakah "id" ada
+    if id == "" {
+        return c.Status(400).JSON(fiber.Map{
+            "error": "ID is required",
+        })
+    }
+
+    // Gunakan ID untuk mencari data
+    user, err := service.FindByID[models.Users]("users", id)
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{
+            "error": "Failed to retrieve user",
+        })
+    }
+
+    if user == nil {
+        return c.Status(404).JSON(fiber.Map{
+            "message": "User not found",
+        })
+    }
+
+    // Kembalikan data pengguna
+    return c.Status(200).JSON(fiber.Map{
+        "message": "User found",
+        "data":    user,
+    })
+}

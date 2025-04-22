@@ -31,11 +31,11 @@ func ReadDB(key string) ([]byte, error) {
 /////////////////////// USERS /////////////////////////////////////////////
 
 // meyimpan data ke database
-func SaveUsers(data []byte) error {
+func SaveUsers(data []byte, key string) error {
     if db == nil {
         return leveldb.ErrClosed
     }
-    return db.Put([]byte("users"), data, nil)
+    return db.Put([]byte(key), data, nil)
 }
 
 // meghapus data dari database

@@ -25,9 +25,17 @@ func main() {
     }))
 
     // routes
+    // CARI SEMUA DATA
     app.Get("/users", handler.GetUsers)
+
+    // CARI ID USERS
+    app.Get("/user", handler.GetUserByID)
+
+    // HAPUS SEMUA DATA USERS
     app.Get("/delete-users", handler.DeleteUsers)
+     
     app.Post("/create-users", handler.CreateUsers)
+
     app.Post("/create-products", handler.CreateProducts)
 
     log.Fatal(app.Listen(":3000"))
