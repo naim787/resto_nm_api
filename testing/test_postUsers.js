@@ -89,6 +89,6 @@ async function testPostUsers() {
 
 
 // Jalankan fungsi test
-testGetUsers();
+// testGetUsers();
 // testDeleteUsers();
-// testPostUsers();
+testPostUsers();
