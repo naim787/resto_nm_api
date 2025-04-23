@@ -62,6 +62,9 @@ func CreateUsers(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid JSON"})
     }
 
+    users.Role = "users"
+    users.Id = service.GenerateUniqueID()
+
     // Gunakan key "users" untuk menyimpan data pengguna
     savedUsers, err := service.SaveOrUpdateData("users", []models.Users{users}, c)
     if err != nil {
@@ -108,5 +111,54 @@ func GetUserByID(c *fiber.Ctx) error {
     return c.Status(200).JSON(fiber.Map{
         "message": "User found",
         "data":    user,
+    })
+}
+
+
+func DeleteUsersById(c *fiber.Ctx) error {
+    // Tangkap query parameter "id"
+    id := c.Query("id")
+
+    // Periksa apakah "id" ada
+    if id == "" {
+        return c.Status(400).JSON(fiber.Map{
+            "error": "ID is required",
+        })
+    }
+
+    // Gunakan FindNotByID untuk mendapatkan data yang tidak memiliki ID tertentu
+    filteredUsers, err := service.FindNotByID[models.Users]("users", id)
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{
+            "error": "Failed to retrieve users",
+        })
+    }
+
+    // Jika tidak ada data yang tersisa, kembalikan respons
+    if len(filteredUsers) == 0 {
+        return c.Status(404).JSON(fiber.Map{
+            "message": "No users found after deletion",
+        })
+    }
+
+    // Simpan data yang diperbarui ke database
+    updatedData, err := json.Marshal(filteredUsers)
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{
+            "error": "Failed to marshal updated users data",
+        })
+    }
+
+    err = repository.SaveUsers(updatedData, "users")
+    if err != nil {
+        return c.Status(500).JSON(fiber.Map{
+            "error": "Failed to save updated users data",
+        })
+    }
+
+    // Kembalikan respons sukses
+    return c.Status(200).JSON(fiber.Map{
+        "message": "User deleted successfully",
+        "remaining_users": filteredUsers,
     })
 }

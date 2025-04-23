@@ -32,7 +32,9 @@ func main() {
     app.Get("/user", handler.GetUserByID)
 
     // HAPUS SEMUA DATA USERS
-    app.Get("/delete-users", handler.DeleteUsers)
+    app.Get("/delete-all-users", handler.DeleteUsers)
+
+    app.Get("/delete-users", handler.DeleteUsersById)
      
     app.Post("/create-users", handler.CreateUsers)
 

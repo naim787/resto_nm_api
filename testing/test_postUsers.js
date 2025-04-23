@@ -1,8 +1,8 @@
 const data = {
-    Name: "Naim",
-    Id: "123",
+    Name: "Tono",
+    Id: "255",
     Email: "naimmmmab@gmail.com",
-    Password: "123",
+    Password: "255",
     Bis_Loc: "paniki",
     Date_Loc: "2025",
     Year: "2004",

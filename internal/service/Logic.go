@@ -88,7 +88,7 @@ func FindByID[T any](key string, id string) (*T, error) {
 
 
 // cari data users yang SAMA deggan data
-func FindNotByID[T any](key string, id string) (*T, error) {
+func FindNotByID[T any](key string, id string) ([]T, error) {
     // Baca data dari database dengan key yang diberikan
     data, err := repository.ReadDB(key)
     if err != nil {
@@ -102,7 +102,8 @@ func FindNotByID[T any](key string, id string) (*T, error) {
         return nil, err // Jika terjadi kesalahan saat parsing JSON
     }
 
-    // Cari item berdasarkan ID
+    // Filter item yang tidak memiliki ID tertentu
+    var filteredItems []T
     for _, item := range items {
         // Gunakan refleksi untuk mendapatkan nilai ID
         itemMap, err := json.Marshal(item)
@@ -114,9 +115,9 @@ func FindNotByID[T any](key string, id string) (*T, error) {
         json.Unmarshal(itemMap, &itemData)
 
         if itemData["Id"] != id {
-            return &item, nil // ID ditemukan, kembalikan data item
+            filteredItems = append(filteredItems, item) // Tambahkan item yang tidak cocok
         }
     }
 
-    return nil, nil // ID tidak ditemukan
+    return filteredItems, nil // Kembalikan semua item yang tidak memiliki ID tertentu
 }
