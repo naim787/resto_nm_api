@@ -62,6 +62,7 @@ func CreateUsers(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid JSON"})
     }
 
+    // DEFAULT VALUE
     users.Role = "users"
     users.Id = service.GenerateUniqueID()
 

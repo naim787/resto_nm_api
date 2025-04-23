@@ -17,6 +17,8 @@ func CreateProducts(c *fiber.Ctx) error {
         return c.Status(400).JSON(fiber.Map{"error": "Invalid JSON"})
     }
 
+    product.ID = service.GenerateUniqueID()
+
     //ambil data dari product revensi dari models.Products
     products, err := service.SaveOrUpdateData("products", []models.Products{product}, c)
     if err != nil {

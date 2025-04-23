@@ -14,6 +14,7 @@ func SaveOrUpdateData[T any](key string, newItems []T, c *fiber.Ctx) ([]T, error
     dbData, err := repository.ReadDB(key)
     // Jika data tidak ada, simpan newItems ke database
     if err == leveldb.ErrNotFound {
+        
         itemBytes, _ := json.Marshal(newItems)
         err = repository.SaveUsers(itemBytes, key) // Simpan data ke database
         if err != nil {
