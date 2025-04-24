@@ -1,12 +1,13 @@
 package main
 
 import (
-    "log"
-    "resto_nm_api/internal/handler"
-    "resto_nm_api/internal/repository"
+	"log"
+	"os"
+	"resto_nm_api/internal/handler"
+	"resto_nm_api/internal/repository"
 
-    "github.com/gofiber/fiber/v2"
-    "github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -34,11 +35,20 @@ func main() {
     // HAPUS SEMUA DATA USERS
     app.Get("/delete-all-users", handler.DeleteUsers)
 
+    // HAPUS DATA USERS BERDASARKAN ID
     app.Get("/delete-users", handler.DeleteUsersById)
      
     app.Post("/create-users", handler.CreateUsers)
 
     app.Post("/create-products", handler.CreateProducts)
 
-    log.Fatal(app.Listen(":3000"))
+
+    port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	log.Fatal(app.Listen(":" + port))
+
+    // log.Fatal(app.Listen(":3000"))
 }
