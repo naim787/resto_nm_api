@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
-	"os"
 	"resto_nm_api/internal/handler"
 	"resto_nm_api/internal/repository"
 
+	"github.com/gofiber/contrib/websocket"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 )
@@ -38,13 +38,20 @@ func main() {
     // HAPUS DATA USERS BERDASARKAN ID
     app.Get("/delete-users", handler.DeleteUsersById)
      
+    // BUAT DATA USERS BARU
     app.Post("/create-users", handler.CreateUsers)
 
+    // BUAT DATA PRODUCT BARU
     app.Post("/create-products", handler.CreateProducts)
 
 
-    port := os.Getenv("PORT")
-	log.Fatal(app.Listen(":" + port))
+     // Middleware for WebSocket upgrade
+     app.Use("/ws", handler.WebSocketHandler)
 
-    // log.Fatal(app.Listen(":3000"))
+     // WebSocket route for orders
+     app.Get("/ws/orders", websocket.New(handler.HandleOrders))
+
+    // port := os.Getenv("PORT")
+	// log.Fatal(app.Listen(":" + port))
+    log.Fatal(app.Listen(":3000"))
 }

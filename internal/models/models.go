@@ -1,12 +1,5 @@
 package models
 
-type representasiData struct {
-    Users Users
-    Products Products
-    Restaurant Restaurant
-    Warehouse Warehouse
-}
-
 type Users struct {
 	Name string // id users
 	Id string // id users
@@ -52,4 +45,13 @@ type Warehouse struct {
     Contact     string   // Kontak pengelola gudang
     Type        string   // Tipe gudang (misal: "Toko" atau "Pasar")
     Storage     []string // Daftar item yang disimpan (misal: ikan, daging, sabun, dll.)
+}
+
+
+
+type Pesnan struct {
+    Products []Products `json:"products"` // List of products in the order
+    TableID  string     `json:"table_id"` // Table ID for the order
+    WaiterID string     `json:"waiter_id"` // Waiter ID who placed the order
+    Time     string     `json:"time"`     // Time of the order
 }

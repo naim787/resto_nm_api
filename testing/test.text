@@ -1,0 +1,4 @@
+1. coba test buat fugsi yang membaca dan meyimpan data ke dalam databse leveldb. contoh ketika fugsi baca data di paggil data yang suda di baca di unmarshal dulu ke type data byte ke golang setelah itu lempar ke luar fuction, nah bgitu jugga ketika meyimpan data buat fugsi yang meyimpan data, ketika arshal data tersebut dari type data go ke byte . tapi masalah nnya ke 2 fugsi ini saya mau bisa mennerima dan meggembalikan models yang relative, contoh ketika users mau myimpan data : repository.SaveData(models.Users, "users")  jadi fugsi ini menerima 2 parameter yang 1 nnya data nnya yang ke 2 key database!!
+
+
+
