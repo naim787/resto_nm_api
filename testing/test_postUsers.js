@@ -1,12 +1,12 @@
 const data = {
-    Name: "Tono",
-    Id: "8888",
-    Email: "naimmmmab@gmail.com",
-    Password: "155",
-    Bis_Loc: "paniki",
-    Date_Loc: "2025",
-    Year: "2004",
-    Role: "admin"
+    name: "Tono",
+    id: "8888",
+    email: "naimmmmab@gmail.com",
+    password: "155",
+    bis_loc: "paniki",
+    date_loc: "2025",
+    year: "2004",
+    role: "admin"
 };
 // Fungsi untuk menguji GET /users
 async function testGetUsers() {
@@ -69,7 +69,7 @@ async function testPostUsers() {
         console.log('Response:', result);
 
         // Validasi apakah data berhasil disimpan
-        if (result.data.length === 0 || result.data[0].Name !== "Naim") {
+        if (!result.data || result.data.name !== "Tono") {
             console.error('Test failed: Data tidak sesuai atau tidak disimpan dengan benar');
         } else {
             console.log('Test passed: Data berhasil disimpan');

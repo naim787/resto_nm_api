@@ -21,45 +21,37 @@ func WebSocketHandler(c *fiber.Ctx) error {
 }
 
 // WebSocket connection handler for orders
+
 func HandleOrders(c *websocket.Conn) {
     defer c.Close()
 
     for {
-        // Read message from the WebSocket
-        var (
-            msg []byte
-            err error
-        )
-        if _, msg, err = c.ReadMessage(); err != nil {
+        var msg []byte
+        _, msg, err := c.ReadMessage()
+        if err != nil {
             fmt.Println("Error reading message:", err)
             break
         }
 
-        // Parse the received JSON into an array of orders
         var orders []models.Pesnan
-        err = json.Unmarshal(msg, &orders)
-        if err != nil {
+        if err := json.Unmarshal(msg, &orders); err != nil {
             fmt.Println("Invalid JSON format:", err)
             continue
         }
 
-        // Save the orders to the database with the key "pesanan"
-        orderBytes, _ := json.Marshal(orders)
-        err = repository.SaveUsers(orderBytes, "pesanan")
-        if err != nil {
-            fmt.Println("Error saving orders to database:", err)
-            continue
+        for _, order := range orders {
+            orderJSON, _ := json.Marshal(order.Products)
+            order.Products = string(orderJSON)
+            if err := repository.DB.Create(&order).Error; err != nil {
+                fmt.Println("Error saving order:", err)
+                continue
+            }
         }
 
-        // Send acknowledgment back to the client
-        response := map[string]string{
-            "message": "Orders saved successfully",
-        }
-        if err = c.WriteJSON(response); err != nil {
+        response := map[string]string{"message": "Orders saved successfully"}
+        if err := c.WriteJSON(response); err != nil {
             fmt.Println("Error sending acknowledgment:", err)
             break
         }
-
-        fmt.Println("Orders saved successfully:", orders)
     }
 }

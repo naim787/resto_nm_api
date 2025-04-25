@@ -1,52 +1,34 @@
 package repository
 
 import (
-    "github.com/syndtr/goleveldb/leveldb"
+    "log"
+    "resto_nm_api/internal/models"
+
+    "gorm.io/driver/sqlite"
+    "gorm.io/gorm"
 )
 
-// variabel global database leveldb
-var db *leveldb.DB
+var DB *gorm.DB
 
-// membukan database leveldb
-func OpenDB() (*leveldb.DB, error) {
-    var err error
-    db, err = leveldb.OpenFile("../internal/db", nil)
+// Membuka database SQLite dengan GORM
+func OpenDB() (*gorm.DB, error) {
+    database, err := gorm.Open(sqlite.Open("restaurant.db"), &gorm.Config{})
     if err != nil {
+        log.Fatal("Gagal konek ke database!")
         return nil, err
     }
-    return db, nil
-}
 
-/////////////////////// function /////////////////////////////////////////////
-
-func ReadDB(key string) ([]byte, error) {
-    if db == nil {
-        return nil, leveldb.ErrClosed
+    // AutoMigrate untuk membuat tabel secara otomatis
+    err = database.AutoMigrate(
+        &models.Users{},
+        &models.Products{},
+        &models.Pesnan{},
+    )
+    if err != nil {
+        log.Fatal("Gagal migrasi tabel!")
+        return nil, err
     }
-    return db.Get([]byte(key), nil)
+
+    DB = database
+    return DB, nil
 }
-
-
-
-/////////////////////// USERS /////////////////////////////////////////////
-
-// meyimpan data ke database
-func SaveUsers(data []byte, key string) error {
-    if db == nil {
-        return leveldb.ErrClosed
-    }
-    return db.Put([]byte(key), data, nil)
-}
-
-// meghapus data dari database
-func DeleteUsers() error {
-    if db == nil {
-        return leveldb.ErrClosed
-    }
-    return db.Delete([]byte("users"), nil)
-}
-
-
-
-
-/////////////////////// PRODUCT /////////////////////////////////////////////

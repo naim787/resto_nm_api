@@ -1,29 +1,5 @@
 package models
 
-type Users struct {
-	Name string // id users
-	Id string // id users
-	Email string // email users
-	Password string // password users
-	Bis_Loc string // lokasi bisnis
-	Date_Loc string // data users di buat
-	Year string // taggal lahir
-	Role string // manager, users
-}
-
-
-type Products struct {
-    ID          string  // ID unik produk
-    Name        string  // Nama menu (misal: Nasi Goreng)
-    Description string  // Deskripsi singkat
-    Category    string  // Misal: makanan, minuman, snack, dessert
-    Price       float64 // Harga satuan
-    Stock       int     // Jumlah stok tersedia
-    ImageURL    string  // (optional) URL ke gambar menu
-}
-
-
-
 type Restaurant struct {
     ID          string  // ID unik restoran
     Name        string  // Nama restoran
@@ -47,11 +23,31 @@ type Warehouse struct {
     Storage     []string // Daftar item yang disimpan (misal: ikan, daging, sabun, dll.)
 }
 
+type Users struct {
+    ID       string `gorm:"primaryKey" json:"id"`
+    Name     string `json:"name"`
+    Email    string `json:"email"`
+    Password string `json:"password"`
+    BisLoc   string `json:"bis_loc"`
+    DateLoc  string `json:"date_loc"`
+    Year     string `json:"year"`
+    Role     string `json:"role"`
+}
 
+type Products struct {
+    ID          string  `gorm:"primaryKey" json:"id"`
+    Name        string  `json:"name"`
+    Description string  `json:"description"`
+    Category    string  `json:"category"`
+    Price       float64 `json:"price"`
+    Stock       int     `json:"stock"`
+    ImageURL    string  `json:"image_url"`
+}
 
 type Pesnan struct {
-    Products []Products `json:"products"` // List of products in the order
-    TableID  string     `json:"table_id"` // Table ID for the order
-    WaiterID string     `json:"waiter_id"` // Waiter ID who placed the order
-    Time     string     `json:"time"`     // Time of the order
+    ID          uint       `gorm:"primaryKey" json:"id"`
+    Products    string     `json:"products"` // Disimpan sebagai JSON string
+    TableID     string     `json:"table_id"`
+    WaiterID    string     `json:"waiter_id"`
+    Time        string     `json:"time"`
 }
