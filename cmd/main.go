@@ -1,13 +1,15 @@
 package main
 
 import (
-    "log"
-    "resto_nm_api/internal/handler"
-    "resto_nm_api/internal/repository"
+	"log"
+	"resto_nm_api/internal/handler/productHandler"
+	"resto_nm_api/internal/handler/usersHandler"
+	"resto_nm_api/internal/handler/websocketHandler"
+	"resto_nm_api/internal/repository"
 
-    "github.com/gofiber/contrib/websocket"
-    "github.com/gofiber/fiber/v2"
-    "github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -25,13 +27,13 @@ func main() {
     }))
 
     // Routes
-    app.Get("/users", handler.GetUsers)
-    app.Post("/create-users", handler.CreateUsers)
-    app.Post("/create-products", handler.CreateProducts)
+    app.Get("/users", usersHandler.GetUsers)
+    app.Post("/create-users", usersHandler.CreateUsers)
+    app.Post("/create-products", productHandler.CreateProducts)
 
     // WebSocket route for orders
-    app.Use("/ws", handler.WebSocketHandler)
-    app.Get("/ws/orders", websocket.New(handler.HandleOrders))
+    app.Use("/ws", websocketHandler.WebSocketHandler)
+    app.Get("/ws/orders", websocket.New(websocketHandler.HandleOrders))
 
     log.Fatal(app.Listen(":3000"))
 }
