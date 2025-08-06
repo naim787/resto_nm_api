@@ -1,57 +1,67 @@
 package websocketHandler
 
 import (
-    "encoding/json"
-    "fmt"
-    "resto_nm_api/internal/models"
-    "resto_nm_api/internal/repository"
+	"encoding/json"
+	"fmt"
+	"resto_nm_api/internal/models"
+	"resto_nm_api/internal/repository"
 
-    "github.com/gofiber/contrib/websocket"
-    "github.com/gofiber/fiber/v2"
+	"github.com/gofiber/contrib/websocket"
+	"github.com/gofiber/fiber/v2"
 )
+
+var clients = make(map[*websocket.Conn]bool)
 
 // Middleware to check WebSocket upgrade
 func WebSocketHandler(c *fiber.Ctx) error {
-    // Check if the request is a WebSocket upgrade
-    if websocket.IsWebSocketUpgrade(c) {
-        c.Locals("allowed", true)
-        return c.Next()
-    }
-    return fiber.ErrUpgradeRequired
+	// Check if the request is a WebSocket upgrade
+	if websocket.IsWebSocketUpgrade(c) {
+		c.Locals("allowed", true)
+		return c.Next()
+	}
+	return fiber.ErrUpgradeRequired
 }
 
 // WebSocket connection handler for orders
-
 func HandleOrders(c *websocket.Conn) {
-    defer c.Close()
+	clients[c] = true
+	defer func() {
+		delete(clients, c)
+		c.Close()
+	}()
 
-    for {
-        var msg []byte
-        _, msg, err := c.ReadMessage()
-        if err != nil {
-            fmt.Println("Error reading message:", err)
-            break
-        }
+	for {
+		_, msg, err := c.ReadMessage()
+		if err != nil {
+			fmt.Println("Error reading message:", err)
+			break
+		}
 
-        var orders []models.Pesnan
-        if err := json.Unmarshal(msg, &orders); err != nil {
-            fmt.Println("Invalid JSON format:", err)
-            continue
-        }
+		var order models.Pesnan
+		if err := json.Unmarshal(msg, &order); err != nil {
+			fmt.Println("Invalid JSON format:", err)
+			continue
+		}
 
-        for _, order := range orders {
-            orderJSON, _ := json.Marshal(order.Products)
-            order.Products = string(orderJSON)
-            if err := repository.DB.Create(&order).Error; err != nil {
-                fmt.Println("Error saving order:", err)
-                continue
-            }
-        }
+		// Marshal ulang untuk simpan Products sebagai string
+		productJSON, _ := json.Marshal(order.Products)
+		order.ProductsRaw = string(productJSON)
 
-        response := map[string]string{"message": "Orders saved successfully"}
-        if err := c.WriteJSON(response); err != nil {
-            fmt.Println("Error sending acknowledgment:", err)
-            break
-        }
-    }
+		// Simpan ke database
+		repository.DB.Create(&order)
+
+		response := map[string]interface{}{
+			"message": "Order saved successfully",
+			"orders":  order,
+		}
+
+		// broadcast ke semua klien
+		for conn := range clients {
+			if err := conn.WriteJSON(response); err != nil {
+				fmt.Println("Broadcast failed:", err)
+				conn.Close()
+				delete(clients, conn)
+			}
+		}
+	}
 }

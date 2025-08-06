@@ -1,6 +1,7 @@
 package usersHandler
 
 import (
+	"resto_nm_api/internal/crypTO"
 	"resto_nm_api/internal/models"
 	"resto_nm_api/internal/repository"
 	"resto_nm_api/internal/service"
@@ -16,6 +17,13 @@ func CreateUsers(c *fiber.Ctx) error {
 
 	user.ID = service.GenerateUniqueID()
 	user.Role = "user"
+
+	encryptedPassword, err := crypTO.Encrypt([]byte(user.Password), []byte(user.Email))
+	if err != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to encrypt password"})
+	}
+    user.Password = string(encryptedPassword)
+
 
 	result := repository.DB.Create(&user)
 	if result.Error != nil {

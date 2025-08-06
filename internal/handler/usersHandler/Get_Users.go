@@ -8,14 +8,14 @@ import (
 )
 
 func GetUsers(c *fiber.Ctx) error {
-    var users []models.Users
-    result := repository.DB.Find(&users)
-    if result.Error != nil {
-        return c.Status(500).JSON(fiber.Map{"error": "Failed to retrieve users"})
-    }
+	var users []models.Users
+	result := repository.DB.Find(&users)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{"error": "Failed to retrieve users"})
+	}
 
-    return c.Status(200).JSON(fiber.Map{
-        "message": "Users retrieved successfully",
-        "data":    users,
-    })
+	return c.Status(200).JSON(fiber.Map{
+		"message": "Users retrieved successfully",
+		"data":    users,
+	})
 }

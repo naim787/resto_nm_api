@@ -44,10 +44,17 @@ type Products struct {
     ImageURL    string  `json:"image_url"`
 }
 
+type OrderItem struct {
+    Produ   Products `json:"products"`
+    Value int `json:"value"`
+    Subtotal  int    `json:"subtotal"`
+}
+
 type Pesnan struct {
-    ID          uint       `gorm:"primaryKey" json:"id"`
-    Products    string     `json:"products"` // Disimpan sebagai JSON string
-    TableID     string     `json:"table_id"`
-    WaiterID    string     `json:"waiter_id"`
-    Time        string     `json:"time"`
+    ID          uint         `gorm:"primaryKey" json:"id"`
+    Products    []OrderItem  `gorm:"-" json:"products"`     // tidak masuk DB
+    ProductsRaw string       `json:"products_raw"`          // masuk DB
+    Table       string       `json:"table_id"`
+    Waiter      string       `json:"waiter_id"`
+    Time        string       `json:"time"`
 }

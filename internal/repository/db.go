@@ -4,7 +4,9 @@ import (
     "log"
     "resto_nm_api/internal/models"
 
-    "gorm.io/driver/sqlite"
+    // "gorm.io/driver/sqlite"
+    "github.com/glebarez/sqlite"
+
     "gorm.io/gorm"
 )
 
